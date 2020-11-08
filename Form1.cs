@@ -10,9 +10,11 @@ using System.Windows.Forms;
 using OpenHardwareMonitor.Hardware;
 using HWMonitorDisp.Response;
 using HWMonitorDisp.Service;
+using HWMonitorDisp.Helper;
 using HWMonitorDisp.Constant;
 using System.IO.Ports;
 using System.Threading;
+using System.Runtime.CompilerServices;
 
 namespace HWMonitorDisp
 {
@@ -21,7 +23,8 @@ namespace HWMonitorDisp
         Computer c = new Computer()
         {
             GPUEnabled = true,
-            CPUEnabled = true
+            CPUEnabled = true,
+            RAMEnabled = true
         };
 
         private DataTable _datatable = new DataTable();
@@ -29,6 +32,8 @@ namespace HWMonitorDisp
         private arduinoService _serviceArd = new arduinoService();
         private hardwareService _serviceHardware = new hardwareService();
         private arduinoResponse _selected = new arduinoResponse();
+        private StringFormating _formats = new StringFormating();
+        private int _defaultInterval = 500;
         
 
 
@@ -38,8 +43,8 @@ namespace HWMonitorDisp
         {
             InitializeComponent();
             getArdunio();
-            
-            
+            timer1.Interval = _defaultInterval;
+            intervaText.Text = _defaultInterval.ToString();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -54,12 +59,14 @@ namespace HWMonitorDisp
         private void readWriteData()
         {
             hardwareResponse data = new hardwareResponse();
-            data = _serviceHardware.GetSystemreading(c);
 
-            cpuLoadVal.Text = " : " + data.CPULoad;
-            cpuTempVal.Text = " : " + data.CPUTemp;
-            gpuLoadVal.Text = " : " + data.GPULoad;
-            gpuTempVal.Text = " : " + data.GPUTemp;
+            data = _serviceHardware.GetSystemreading(c);
+           
+            cpuLoadVal.Text = " : "+ _formats.TwoDecimal(_formats.NoZero(data.CPULoad)) +  "  %";
+            cpuTempVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(data.CPUTemp)) + "  c";
+            gpuLoadVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(data.GPULoad)) + "  %";
+            gpuTempVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(data.GPUTemp)) + "  c";
+            ramUsedVal.Text = " : " + _formats.TwoDecimal( data.RAMUsed) + "MB";
         }
         
         private void scanButton_Click(object sender, EventArgs e)
@@ -105,6 +112,7 @@ namespace HWMonitorDisp
 
         private void intervaText_TextChanged(object sender, EventArgs e)
         {
+            debugLabel.Text = timer1.Interval.ToString();
             valInterNum.Visible = false;
             valInterLim.Visible = false;
             if (!string.IsNullOrWhiteSpace(intervaText.Text))
@@ -114,20 +122,36 @@ namespace HWMonitorDisp
                     if (c < '0' || c > '9')
                     {
                         valInterNum.Visible = true;
+                        timer1.Interval = _defaultInterval;
                         break;
                     }
                     else
                     {
-                        int interva = Convert.ToInt32(textBox1.Text);
-                        if (interva >= 100 && interva <= 2000)
+                        int interva = Convert.ToInt32(intervaText.Text);
+                        if (interva >= 200 && interva <= 2000)
+                        {
                             timer1.Interval = interva;
+                            debugLabel.Text = timer1.Interval.ToString();
+                            break;
+                        }
                         else
+                        {
                             valInterLim.Visible = true;
-                        break;
+                            timer1.Interval = _defaultInterval;
+                            debugLabel.Text = timer1.Interval.ToString();
+                            break;
+                        }
 
 
                     }
                 }
+            }
+            else
+            {
+                valInterNum.Visible = true;
+                timer1.Interval = _defaultInterval;
+                debugLabel.Text = timer1.Interval.ToString();
+               
             }
 
         }

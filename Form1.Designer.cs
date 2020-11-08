@@ -44,13 +44,18 @@
             this.cpuTempVal = new System.Windows.Forms.Label();
             this.gpuLoadVal = new System.Windows.Forms.Label();
             this.gpuTempVal = new System.Windows.Forms.Label();
+            this.valInterNum = new System.Windows.Forms.Label();
+            this.valInterLim = new System.Windows.Forms.Label();
+            this.ramUsed = new System.Windows.Forms.CheckBox();
+            this.ramUsedVal = new System.Windows.Forms.Label();
+            this.debugLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // comListText
             // 
             this.comListText.FormattingEnabled = true;
             this.comListText.Location = new System.Drawing.Point(89, 24);
-            this.comListText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comListText.Margin = new System.Windows.Forms.Padding(2);
             this.comListText.Name = "comListText";
             this.comListText.Size = new System.Drawing.Size(82, 21);
             this.comListText.TabIndex = 0;
@@ -79,7 +84,7 @@
             // scanButton
             // 
             this.scanButton.Location = new System.Drawing.Point(179, 23);
-            this.scanButton.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.scanButton.Margin = new System.Windows.Forms.Padding(2);
             this.scanButton.Name = "scanButton";
             this.scanButton.Size = new System.Drawing.Size(50, 36);
             this.scanButton.TabIndex = 3;
@@ -96,7 +101,7 @@
             // intervaText
             // 
             this.intervaText.Location = new System.Drawing.Point(305, 8);
-            this.intervaText.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.intervaText.Margin = new System.Windows.Forms.Padding(2);
             this.intervaText.Name = "intervaText";
             this.intervaText.Size = new System.Drawing.Size(68, 20);
             this.intervaText.TabIndex = 4;
@@ -116,7 +121,7 @@
             // 
             this.cpuLoad.AutoSize = true;
             this.cpuLoad.Location = new System.Drawing.Point(258, 33);
-            this.cpuLoad.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cpuLoad.Margin = new System.Windows.Forms.Padding(2);
             this.cpuLoad.Name = "cpuLoad";
             this.cpuLoad.Size = new System.Drawing.Size(75, 17);
             this.cpuLoad.TabIndex = 6;
@@ -127,7 +132,7 @@
             // 
             this.cpuTemp.AutoSize = true;
             this.cpuTemp.Location = new System.Drawing.Point(258, 53);
-            this.cpuTemp.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cpuTemp.Margin = new System.Windows.Forms.Padding(2);
             this.cpuTemp.Name = "cpuTemp";
             this.cpuTemp.Size = new System.Drawing.Size(78, 17);
             this.cpuTemp.TabIndex = 7;
@@ -138,7 +143,7 @@
             // 
             this.gpuLoad.AutoSize = true;
             this.gpuLoad.Location = new System.Drawing.Point(258, 72);
-            this.gpuLoad.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.gpuLoad.Margin = new System.Windows.Forms.Padding(2);
             this.gpuLoad.Name = "gpuLoad";
             this.gpuLoad.Size = new System.Drawing.Size(76, 17);
             this.gpuLoad.TabIndex = 8;
@@ -192,11 +197,67 @@
             this.gpuTempVal.TabIndex = 14;
             this.gpuTempVal.Text = "-";
             // 
+            // valInterNum
+            // 
+            this.valInterNum.AutoSize = true;
+            this.valInterNum.ForeColor = System.Drawing.Color.Firebrick;
+            this.valInterNum.Location = new System.Drawing.Point(378, 11);
+            this.valInterNum.Name = "valInterNum";
+            this.valInterNum.Size = new System.Drawing.Size(109, 13);
+            this.valInterNum.TabIndex = 16;
+            this.valInterNum.Text = "Masukan angka valid";
+            this.valInterNum.Visible = false;
+            // 
+            // valInterLim
+            // 
+            this.valInterLim.AutoSize = true;
+            this.valInterLim.ForeColor = System.Drawing.Color.Firebrick;
+            this.valInterLim.Location = new System.Drawing.Point(378, 11);
+            this.valInterLim.Name = "valInterLim";
+            this.valInterLim.Size = new System.Drawing.Size(136, 13);
+            this.valInterLim.TabIndex = 17;
+            this.valInterLim.Text = "Masukan nilai 200-2000 ms";
+            this.valInterLim.Visible = false;
+            // 
+            // ramUsed
+            // 
+            this.ramUsed.AutoSize = true;
+            this.ramUsed.Location = new System.Drawing.Point(426, 34);
+            this.ramUsed.Margin = new System.Windows.Forms.Padding(2);
+            this.ramUsed.Name = "ramUsed";
+            this.ramUsed.Size = new System.Drawing.Size(78, 17);
+            this.ramUsed.TabIndex = 19;
+            this.ramUsed.Text = "RAM Used";
+            this.ramUsed.UseVisualStyleBackColor = true;
+            // 
+            // ramUsedVal
+            // 
+            this.ramUsedVal.AutoSize = true;
+            this.ramUsedVal.Location = new System.Drawing.Point(519, 35);
+            this.ramUsedVal.Name = "ramUsedVal";
+            this.ramUsedVal.Size = new System.Drawing.Size(10, 13);
+            this.ramUsedVal.TabIndex = 20;
+            this.ramUsedVal.Text = "-";
+            // 
+            // debugLabel
+            // 
+            this.debugLabel.AutoSize = true;
+            this.debugLabel.Location = new System.Drawing.Point(584, 8);
+            this.debugLabel.Name = "debugLabel";
+            this.debugLabel.Size = new System.Drawing.Size(35, 13);
+            this.debugLabel.TabIndex = 18;
+            this.debugLabel.Text = "label2";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(533, 292);
+            this.ClientSize = new System.Drawing.Size(631, 292);
+            this.Controls.Add(this.ramUsedVal);
+            this.Controls.Add(this.ramUsed);
+            this.Controls.Add(this.debugLabel);
+            this.Controls.Add(this.valInterLim);
+            this.Controls.Add(this.valInterNum);
             this.Controls.Add(this.gpuTempVal);
             this.Controls.Add(this.gpuLoadVal);
             this.Controls.Add(this.cpuTempVal);
@@ -211,7 +272,7 @@
             this.Controls.Add(this.portDesc);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comListText);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -237,6 +298,11 @@
         private System.Windows.Forms.Label cpuTempVal;
         private System.Windows.Forms.Label gpuLoadVal;
         private System.Windows.Forms.Label gpuTempVal;
+        private System.Windows.Forms.Label valInterNum;
+        private System.Windows.Forms.Label valInterLim;
+        private System.Windows.Forms.CheckBox ramUsed;
+        private System.Windows.Forms.Label ramUsedVal;
+        private System.Windows.Forms.Label debugLabel;
     }
 }
 

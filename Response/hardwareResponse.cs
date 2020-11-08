@@ -12,5 +12,6 @@ namespace HWMonitorDisp.Response
         public string CPUTemp { get; set; }
         public string GPULoad { get; set; }
         public string GPUTemp { get; set; }
+        public string RAMUsed { get; set; }
     }
 }

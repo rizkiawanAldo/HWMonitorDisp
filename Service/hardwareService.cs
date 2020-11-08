@@ -41,7 +41,7 @@ namespace HWMonitorDisp.Service
                 }
                 #endregion
 
-
+                #region CPU GET VALUE
                 if (hardwadre.HardwareType == HardwareType.CPU)
                 {
                     hardwadre.Update();
@@ -58,9 +58,24 @@ namespace HWMonitorDisp.Service
                     }
 
                 }
-              
+                #endregion
+                if (hardwadre.HardwareType == HardwareType.RAM)
+                {
+                    hardwadre.Update();
+
+                    foreach (var _sensor in hardwadre.Sensors)
+                    {
+
+                        if (_sensor.Name == "Used Memory")
+                            result.RAMUsed = _sensor.Value.GetValueOrDefault().ToString();
+                 
+
+                    }
+
+                }
+
             }
-           
+
             return result;        
         }
     }
