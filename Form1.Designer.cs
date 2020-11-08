@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.comListText = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.portDesc = new System.Windows.Forms.Label();
@@ -49,6 +50,7 @@
             this.ramUsed = new System.Windows.Forms.CheckBox();
             this.ramUsedVal = new System.Windows.Forms.Label();
             this.debugLabel = new System.Windows.Forms.Label();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.SuspendLayout();
             // 
             // comListText
@@ -252,6 +254,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(631, 292);
             this.Controls.Add(this.ramUsedVal);
             this.Controls.Add(this.ramUsed);
@@ -272,9 +275,10 @@
             this.Controls.Add(this.portDesc);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comListText);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "HWMonitorDisp";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -303,6 +307,7 @@
         private System.Windows.Forms.CheckBox ramUsed;
         private System.Windows.Forms.Label ramUsedVal;
         private System.Windows.Forms.Label debugLabel;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }
 
