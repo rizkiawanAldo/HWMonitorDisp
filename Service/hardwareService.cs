@@ -12,6 +12,7 @@ namespace HWMonitorDisp.Service
     {
         public hardwareResponse GetSystemreading(Computer c)
         {
+         
             hardwareResponse result = new hardwareResponse();
             foreach (var hardwadre in c.Hardware)
             {
@@ -44,16 +45,22 @@ namespace HWMonitorDisp.Service
                 if (hardwadre.HardwareType == HardwareType.CPU)
                 {
                     hardwadre.Update();
+                    
                     foreach (var _sensor in hardwadre.Sensors)
                     {
+                       
                         if (_sensor.SensorType == SensorType.Temperature)
-                            result.CPUTemp = _sensor.Value.GetValueOrDefault().ToString();
-                        if (_sensor.SensorType == SensorType.Load)
-                            result.CPULoad= _sensor.Value.GetValueOrDefault().ToString();
+                         result.CPUTemp = _sensor.Value.GetValueOrDefault().ToString();                        
+                        
+                        if (_sensor.SensorType == SensorType.Load && _sensor.Name == "CPU Total")
+                         result.CPULoad = _sensor.Value.GetValueOrDefault().ToString();                                            
+                       
                     }
 
                 }
+              
             }
+           
             return result;        
         }
     }

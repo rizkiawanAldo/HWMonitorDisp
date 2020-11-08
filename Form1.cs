@@ -63,7 +63,7 @@ namespace HWMonitorDisp
         
         private void scanButton_Click(object sender, EventArgs e)
         {
-
+            getArdunio();
         }
         private void getArdunio()
         {
