@@ -105,6 +105,30 @@ namespace HWMonitorDisp
 
         private void intervaText_TextChanged(object sender, EventArgs e)
         {
+            valInterNum.Visible = false;
+            valInterLim.Visible = false;
+            if (!string.IsNullOrWhiteSpace(intervaText.Text))
+            {
+                foreach (char c in intervaText.Text)
+                {
+                    if (c < '0' || c > '9')
+                    {
+                        valInterNum.Visible = true;
+                        break;
+                    }
+                    else
+                    {
+                        int interva = Convert.ToInt32(textBox1.Text);
+                        if (interva >= 100 && interva <= 2000)
+                            timer1.Interval = interva;
+                        else
+                            valInterLim.Visible = true;
+                        break;
+
+
+                    }
+                }
+            }
 
         }
     }
