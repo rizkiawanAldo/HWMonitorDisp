@@ -38,6 +38,7 @@ namespace HWMonitorDisp.Service
                     if (desc.Contains("Arduino"))
                     {
                         result.autoSelected = item["DeviceID"].ToString();
+                        result.selectedDesc = item["Description"].ToString();
                         return result;
                     }
                 }

@@ -12,7 +12,7 @@ using HWMonitorDisp.Response;
 using HWMonitorDisp.Service;
 using HWMonitorDisp.Constant;
 using System.IO.Ports;
-
+using System.Threading;
 
 namespace HWMonitorDisp
 {
@@ -28,6 +28,7 @@ namespace HWMonitorDisp
         private SerialPort port = new SerialPort();
         private arduinoService _serviceArd = new arduinoService();
         private hardwareService _serviceHardware = new hardwareService();
+        private arduinoResponse _selected = new arduinoResponse();
         
 
 
@@ -55,10 +56,10 @@ namespace HWMonitorDisp
             hardwareResponse data = new hardwareResponse();
             data = _serviceHardware.GetSystemreading(c);
 
-            cpuLoad.Text = Labling.CPULOAD + data.CPULoad;
-            cpuTemp.Text = Labling.CPUTEMP + data.CPUTemp;
-            gpuLoad.Text = Labling.GPULOAD + data.GPULoad;
-            gpuTemp.Text = Labling.CPUTEMP + data.GPUTemp;
+            cpuLoadVal.Text = " : " + data.CPULoad;
+            cpuTempVal.Text = " : " + data.CPUTemp;
+            gpuLoadVal.Text = " : " + data.GPULoad;
+            gpuTempVal.Text = " : " + data.GPUTemp;
         }
         
         private void scanButton_Click(object sender, EventArgs e)
@@ -68,22 +69,23 @@ namespace HWMonitorDisp
         private void getArdunio()
         {
             comListText.Items.Clear();
-            arduinoResponse result = new arduinoResponse();
-            result = _serviceArd.AutodetectArduinoPort();
-            if (result.comList != null)
+           //arduinoResponse result = new arduinoResponse();
+            _selected = _serviceArd.AutodetectArduinoPort();
+
+            if (_selected.comList != null)
             {
-                comListText.Items.Add(result.comList.Select(a => a.DeviceID).FirstOrDefault());
-                if (result.autoSelected != null)
+                comListText.Items.Add(_selected.comList.Select(a => a.DeviceID).FirstOrDefault());
+                if (_selected.autoSelected != null)
                 {
-                    comListText.SelectedItem = result.autoSelected;
-                    portDesc.Text = "Description :" + result.comList.Where(a => a.DeviceID == result.autoSelected).Select(a => a.Desc).FirstOrDefault(); ;
+                    comListText.SelectedItem = _selected.autoSelected;
+                    portDesc.Text = "Description :" + _selected.comList.Where(a => a.DeviceID == _selected.autoSelected).Select(a => a.Desc).FirstOrDefault(); ;
                     return;
                 }
 
 
-                comListText.Items.Add(result.comList.Select(a => a.DeviceID).FirstOrDefault());
-                comListText.SelectedItem = result.autoSelected;
-                portDesc.Text = "Description :" + result.comList.Where(a => a.DeviceID == result.autoSelected).Select(a => a.Desc).FirstOrDefault(); ;
+                comListText.Items.Add(_selected.comList.Select(a => a.DeviceID).FirstOrDefault());
+                comListText.SelectedItem = _selected.autoSelected;
+                portDesc.Text = "Description :" + _selected.comList.Where(a => a.DeviceID == _selected.autoSelected).Select(a => a.Desc).FirstOrDefault(); ;
                 return;
             }
             else
@@ -96,6 +98,14 @@ namespace HWMonitorDisp
 
         }
 
-      
+        private void comListText_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            portDesc.Text = "Description :" + _selected.comList.Where(a => a.DeviceID == comListText.SelectedItem.ToString()).Select(a => a.Desc).FirstOrDefault(); ;
+        }
+
+        private void intervaText_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

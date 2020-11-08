@@ -10,6 +10,7 @@ namespace HWMonitorDisp.Response
     {
         public List<detectedCom> comList { get; set; }
         public string autoSelected { get; set; }
+        public string selectedDesc { get; set; }
 
     }
     public class detectedCom
