@@ -11,7 +11,7 @@ namespace HWMonitorDisp.Helper
         public string NoZero(string input)
         {
             string result = "";
-
+            if (!String.IsNullOrWhiteSpace(input))
             result = input.Length == 1 ? input +".00" : input;
 
             return result;

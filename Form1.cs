@@ -15,6 +15,9 @@ using HWMonitorDisp.Constant;
 using System.IO.Ports;
 using System.Threading;
 using System.Runtime.CompilerServices;
+using System.Windows.Forms.DataVisualization.Charting;
+using System.Diagnostics;
+
 
 namespace HWMonitorDisp
 {
@@ -27,22 +30,30 @@ namespace HWMonitorDisp
             RAMEnabled = true
         };
 
-        private DataTable _datatable = new DataTable();
         private SerialPort port = new SerialPort();
         private arduinoService _serviceArd = new arduinoService();
         private hardwareService _serviceHardware = new hardwareService();
         private arduinoResponse _selected = new arduinoResponse();
         private StringFormating _formats = new StringFormating();
-        private int _defaultInterval = 500;
-        
+
+        private int _defaultInterval = 1000;
+        hardwareResponse _data = new hardwareResponse();
+
+        Stopwatch CPULoadTime = new Stopwatch();
+        Stopwatch CPUTempTime = new Stopwatch();
 
 
-
+        // private int _xNow = 1000;
+        //private int[] cpuLoadArray = new int[1000];
+        private int [] cpuLoadArray = new int[1000];
 
         public Form1()
         {
             InitializeComponent();
             getArdunio();
+            
+           
+            initChart();
             timer1.Interval = _defaultInterval;
             intervaText.Text = _defaultInterval.ToString();
         }
@@ -50,23 +61,61 @@ namespace HWMonitorDisp
         private void timer1_Tick(object sender, EventArgs e)
         {
             readWriteData();
+            if (cpuLoad.Checked)
+            {
+                int Y = Convert.ToInt32(float.Parse(_data.CPULoad));
+                chart1.Series["CPULOAD"].Points.AddXY(CPULoadTime.ElapsedMilliseconds, Y);          
+                if (CPULoadTime.ElapsedMilliseconds > 10000)
+                {
+                    chart1.Series["CPULOAD"].Points.RemoveAt(0);
+                    chart1.ResetAutoValues();
+                }               
+            }
+            if (cpuTemp.Checked)
+            {
+                int Y = Convert.ToInt32(float.Parse(_data.CPUTemp));
+                chart1.Series["CPUTEMP"].Points.AddXY(CPULoadTime.ElapsedMilliseconds, Y);
+                if (CPUTempTime.ElapsedMilliseconds > 10000)
+                {
+                    chart1.Series["CPUTEMP"].Points.RemoveAt(0);
+                    chart1.ResetAutoValues();
+                }
+            }
+            //debugLabel.Text = CPULoadTime.ElapsedMilliseconds.ToString();
+
+
         }
         private void Form1_Load(object sender, EventArgs e)
         {
             c.Open();
         }
+        private void initChart()
+        {
+
+            chart1.Series.RemoveAt(0);
+            chart1.ChartAreas.RemoveAt(0);
+
+            chart1.ChartAreas.Add("CPU");
+            chart1.ChartAreas["CPU"].AxisY.Maximum = 100;
+            chart1.ChartAreas["CPU"].AxisY.Minimum = 0;
+            chart1.ChartAreas["CPU"].AxisX.LabelStyle.Enabled = false;
+            chart1.ChartAreas["CPU"].AxisX.MajorGrid.Enabled = false;
+            chart1.ChartAreas["CPU"].Visible = true;
+            
+
+        }
 
         private void readWriteData()
         {
-            hardwareResponse data = new hardwareResponse();
+            
 
-            data = _serviceHardware.GetSystemreading(c);
+            _data = _serviceHardware.GetSystemreading(c);
            
-            cpuLoadVal.Text = " : "+ _formats.TwoDecimal(_formats.NoZero(data.CPULoad)) +  "  %";
-            cpuTempVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(data.CPUTemp)) + "  c";
-            gpuLoadVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(data.GPULoad)) + "  %";
-            gpuTempVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(data.GPUTemp)) + "  c";
-            ramUsedVal.Text = " : " + _formats.TwoDecimal( data.RAMUsed) + "MB";
+            cpuLoadVal.Text = " : "+ _formats.TwoDecimal(_formats.NoZero(_data.CPULoad)) +  "  %";
+            cpuTempVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(_data.CPUTemp)) + "  c";
+            gpuLoadVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(_data.GPULoad)) + "  %";
+            gpuTempVal.Text = " : " + _formats.TwoDecimal(_formats.NoZero(_data.GPUTemp)) + "  c";
+            ramUsedVal.Text = " : " + _formats.TwoDecimal(_data.RAMUsed) + "MB";
         }
         
         private void scanButton_Click(object sender, EventArgs e)
@@ -112,7 +161,7 @@ namespace HWMonitorDisp
 
         private void intervaText_TextChanged(object sender, EventArgs e)
         {
-            debugLabel.Text = timer1.Interval.ToString();
+           // debugLabel.Text = timer1.Interval.ToString();
             valInterNum.Visible = false;
             valInterLim.Visible = false;
             if (!string.IsNullOrWhiteSpace(intervaText.Text))
@@ -152,6 +201,45 @@ namespace HWMonitorDisp
                 timer1.Interval = _defaultInterval;
                 debugLabel.Text = timer1.Interval.ToString();
                
+            }
+
+        }
+
+        private void cpuLoad_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cpuLoad.Checked)
+            {             
+                chart1.Series.Add("CPULOAD");
+                chart1.Series["CPULOAD"].ChartArea = "CPU";
+                chart1.Series["CPULOAD"].LegendText = "CPU Load";
+                chart1.Series["CPULOAD"].ChartType = SeriesChartType.Line;
+                chart1.Series["CPULOAD"].IsValueShownAsLabel=false;
+                CPULoadTime.Start();
+            }
+            else
+            {
+                chart1.Series.Remove(chart1.Series["CPULOAD"]);
+                CPULoadTime.Stop();
+                CPULoadTime.Reset();            
+            }
+        }
+
+        private void cpuTemp_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cpuTemp.Checked)
+            {
+                chart1.Series.Add("CPUTEMP");
+                chart1.Series["CPUTEMP"].ChartArea = "CPU";
+                chart1.Series["CPUTEMP"].LegendText = "CPU Temp";
+                chart1.Series["CPUTEMP"].ChartType = SeriesChartType.Line;
+                chart1.Series["CPUTEMP"].IsValueShownAsLabel = false;
+                CPUTempTime.Start();
+            }
+            else
+            {
+                chart1.Series.Remove(chart1.Series["CPUTEMP"]);
+                CPUTempTime.Stop();
+                CPUTempTime.Reset();
             }
 
         }
