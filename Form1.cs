@@ -17,7 +17,7 @@ using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.DataVisualization.Charting;
 using System.Diagnostics;
-
+using System.Drawing.Configuration;
 
 namespace HWMonitorDisp
 {
@@ -118,7 +118,14 @@ namespace HWMonitorDisp
         
         private void scanButton_Click(object sender, EventArgs e)
         {
+            Status.Visible = false;
             getArdunio();
+            if (comListText.Items.Count == 0)
+            {
+                Status.Text = "No port detected !";
+                Status.ForeColor = Color.Firebrick;
+                Status.Visible = true;
+            }
         }
         private void getArdunio()
         {
@@ -160,45 +167,44 @@ namespace HWMonitorDisp
         private void intervaText_TextChanged(object sender, EventArgs e)
         {
            // debugLabel.Text = timer1.Interval.ToString();
-            valInterNum.Visible = false;
-            valInterLim.Visible = false;
+            valInter.Visible = false;
+            valInter.Text = "";
+
             if (!string.IsNullOrWhiteSpace(intervaText.Text))
             {
-                foreach (char c in intervaText.Text)
+                try
                 {
-                    if (c < '0' || c > '9')
+                    int interva = Convert.ToInt32(intervaText.Text);
+                    if (interva >= 200 && interva <= 2000)
                     {
-                        valInterNum.Visible = true;
-                        timer1.Interval = _defaultInterval;
-                        break;
+                        timer1.Interval = interva;
+                        debugLabel.Text = timer1.Interval.ToString();
+                        return;
                     }
                     else
                     {
-                        int interva = Convert.ToInt32(intervaText.Text);
-                        if (interva >= 200 && interva <= 2000)
-                        {
-                            timer1.Interval = interva;
-                            debugLabel.Text = timer1.Interval.ToString();
-                            break;
-                        }
-                        else
-                        {
-                            valInterLim.Visible = true;
-                            timer1.Interval = _defaultInterval;
-                            debugLabel.Text = timer1.Interval.ToString();
-                            break;
-                        }
-
-
+                        valInter.Text = "Masukan Angka diantara 200 - 2000 ms";
+                        valInter.Visible = true;
+                        timer1.Interval = _defaultInterval;
+                        debugLabel.Text = timer1.Interval.ToString();
+                        return;
                     }
+
                 }
+                catch (Exception)
+                {
+                    valInter.Text = "Masukan Angka valid";
+                    valInter.Visible = true;
+                    return;
+                }
+
             }
             else
             {
-                valInterNum.Visible = true;
+                valInter.Text = "Masukan Angka";
+                valInter.Visible = true;
                 timer1.Interval = _defaultInterval;
-                debugLabel.Text = timer1.Interval.ToString();
-               
+                debugLabel.Text = timer1.Interval.ToString();              
             }
 
         }
@@ -240,6 +246,49 @@ namespace HWMonitorDisp
             //    CPUTempTime.Reset();
             //}
 
+        }
+
+        private void ConnectButton_Click(object sender, EventArgs e)
+        {
+            if (comListText.SelectedItem != null)
+            {
+                try
+                {
+                    _serviceArd.ConnectArduino(comListText.SelectedItem);
+                    Status.Text = "Connected !";
+                    Status.ForeColor = Color.Green;
+                }
+                catch (Exception ex)
+                {
+                   MessageBox.Show(ex.Message);
+                }
+            }
+            else
+            {
+                Status.Text = "Masukan Port !";
+                Status.ForeColor = Color.Firebrick;
+                Status.Visible = true;
+            }
+            
+
+        }
+
+        private void DisconnButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                _serviceArd.DisconnectArduino();
+                Status.Text = "Disconnected !";
+                Status.ForeColor = Color.Firebrick;
+                Status.Visible = true;
+            }
+            catch (Exception)
+            {
+                Status.Text = "no opened port :(";
+                Status.ForeColor = Color.Firebrick;
+                Status.Visible = true;
+                return;
+            }
         }
     }
 }

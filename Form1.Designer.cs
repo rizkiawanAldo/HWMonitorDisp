@@ -48,13 +48,16 @@
             this.cpuTempVal = new System.Windows.Forms.Label();
             this.gpuLoadVal = new System.Windows.Forms.Label();
             this.gpuTempVal = new System.Windows.Forms.Label();
-            this.valInterNum = new System.Windows.Forms.Label();
-            this.valInterLim = new System.Windows.Forms.Label();
+            this.valInter = new System.Windows.Forms.Label();
             this.ramUsed = new System.Windows.Forms.CheckBox();
             this.ramUsedVal = new System.Windows.Forms.Label();
             this.debugLabel = new System.Windows.Forms.Label();
             this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.ConnectButton = new System.Windows.Forms.Button();
+            this.DisconnButton = new System.Windows.Forms.Button();
+            this.Status = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -87,9 +90,9 @@
             // 
             // scanButton
             // 
-            this.scanButton.Location = new System.Drawing.Point(268, 35);
+            this.scanButton.Location = new System.Drawing.Point(260, 35);
             this.scanButton.Name = "scanButton";
-            this.scanButton.Size = new System.Drawing.Size(75, 55);
+            this.scanButton.Size = new System.Drawing.Size(104, 41);
             this.scanButton.TabIndex = 3;
             this.scanButton.Text = "Scan";
             this.scanButton.UseVisualStyleBackColor = true;
@@ -200,29 +203,17 @@
             this.gpuTempVal.TabIndex = 14;
             this.gpuTempVal.Text = "-";
             // 
-            // valInterNum
+            // valInter
             // 
-            this.valInterNum.AutoSize = true;
-            this.valInterNum.ForeColor = System.Drawing.Color.Firebrick;
-            this.valInterNum.Location = new System.Drawing.Point(567, 17);
-            this.valInterNum.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.valInterNum.Name = "valInterNum";
-            this.valInterNum.Size = new System.Drawing.Size(157, 20);
-            this.valInterNum.TabIndex = 16;
-            this.valInterNum.Text = "Masukan angka valid";
-            this.valInterNum.Visible = false;
-            // 
-            // valInterLim
-            // 
-            this.valInterLim.AutoSize = true;
-            this.valInterLim.ForeColor = System.Drawing.Color.Firebrick;
-            this.valInterLim.Location = new System.Drawing.Point(567, 17);
-            this.valInterLim.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.valInterLim.Name = "valInterLim";
-            this.valInterLim.Size = new System.Drawing.Size(202, 20);
-            this.valInterLim.TabIndex = 17;
-            this.valInterLim.Text = "Masukan nilai 200-2000 ms";
-            this.valInterLim.Visible = false;
+            this.valInter.AutoSize = true;
+            this.valInter.ForeColor = System.Drawing.Color.Firebrick;
+            this.valInter.Location = new System.Drawing.Point(567, 17);
+            this.valInter.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.valInter.Name = "valInter";
+            this.valInter.Size = new System.Drawing.Size(157, 20);
+            this.valInter.TabIndex = 16;
+            this.valInter.Text = "Masukan angka valid";
+            this.valInter.Visible = false;
             // 
             // ramUsed
             // 
@@ -247,7 +238,7 @@
             // debugLabel
             // 
             this.debugLabel.AutoSize = true;
-            this.debugLabel.Location = new System.Drawing.Point(876, 12);
+            this.debugLabel.Location = new System.Drawing.Point(658, 167);
             this.debugLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.debugLabel.Name = "debugLabel";
             this.debugLabel.Size = new System.Drawing.Size(51, 20);
@@ -270,19 +261,64 @@
             this.chart1.Size = new System.Drawing.Size(684, 300);
             this.chart1.TabIndex = 21;
             this.chart1.Text = "chart1";
+            this.chart1.Visible = false;
+            // 
+            // ConnectButton
+            // 
+            this.ConnectButton.Location = new System.Drawing.Point(260, 82);
+            this.ConnectButton.Name = "ConnectButton";
+            this.ConnectButton.Size = new System.Drawing.Size(104, 41);
+            this.ConnectButton.TabIndex = 22;
+            this.ConnectButton.Text = "Connect";
+            this.ConnectButton.UseVisualStyleBackColor = true;
+            this.ConnectButton.Click += new System.EventHandler(this.ConnectButton_Click);
+            // 
+            // DisconnButton
+            // 
+            this.DisconnButton.Location = new System.Drawing.Point(260, 129);
+            this.DisconnButton.Name = "DisconnButton";
+            this.DisconnButton.Size = new System.Drawing.Size(104, 41);
+            this.DisconnButton.TabIndex = 23;
+            this.DisconnButton.Text = "Disconnect";
+            this.DisconnButton.UseVisualStyleBackColor = true;
+            this.DisconnButton.Click += new System.EventHandler(this.DisconnButton_Click);
+            // 
+            // Status
+            // 
+            this.Status.AutoSize = true;
+            this.Status.ForeColor = System.Drawing.Color.Firebrick;
+            this.Status.Location = new System.Drawing.Point(90, 115);
+            this.Status.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.Status.Name = "Status";
+            this.Status.Size = new System.Drawing.Size(49, 20);
+            this.Status.TabIndex = 24;
+            this.Status.Text = "STAT";
+            this.Status.Visible = false;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(28, 115);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(64, 20);
+            this.label3.TabIndex = 25;
+            this.label3.Text = "Status :";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(946, 449);
+            this.ClientSize = new System.Drawing.Size(908, 214);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.Status);
+            this.Controls.Add(this.DisconnButton);
+            this.Controls.Add(this.ConnectButton);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.ramUsedVal);
             this.Controls.Add(this.ramUsed);
             this.Controls.Add(this.debugLabel);
-            this.Controls.Add(this.valInterLim);
-            this.Controls.Add(this.valInterNum);
+            this.Controls.Add(this.valInter);
             this.Controls.Add(this.gpuTempVal);
             this.Controls.Add(this.gpuLoadVal);
             this.Controls.Add(this.cpuTempVal);
@@ -324,13 +360,16 @@
         private System.Windows.Forms.Label cpuTempVal;
         private System.Windows.Forms.Label gpuLoadVal;
         private System.Windows.Forms.Label gpuTempVal;
-        private System.Windows.Forms.Label valInterNum;
-        private System.Windows.Forms.Label valInterLim;
+        private System.Windows.Forms.Label valInter;
         private System.Windows.Forms.CheckBox ramUsed;
         private System.Windows.Forms.Label ramUsedVal;
         private System.Windows.Forms.Label debugLabel;
         private System.IO.Ports.SerialPort serialPort1;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Button ConnectButton;
+        private System.Windows.Forms.Button DisconnButton;
+        private System.Windows.Forms.Label Status;
+        private System.Windows.Forms.Label label3;
     }
 }
 
